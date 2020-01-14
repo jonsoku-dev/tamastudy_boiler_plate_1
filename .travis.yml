@@ -1,0 +1,35 @@
+language: generic
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t the2792/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true the2792/react-test npm test
+
+after_success:
+  - docker build -t the2792/multi-client ./client
+  - docker build -t the2792/multi-nginx ./nginx
+  - docker build -t the2792/multi-server ./server
+  - docker build -t the2792/multi-worker ./worker
+  # Docker CLI 에 로그인
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # 위의 이미지들을 Docker hub에 push
+  - docker push the2792/multi-client
+  - docker push the2792/multi-nginx
+  - docker push the2792/multi-server
+  - docker push the2792/multi-worker
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: ap-northeast-1
+  app: MultiDocker-env
+  env: MultidockerEnv-env
+  bucket_name: elasticbeanstalk-ap-northeast-1-475625490253
+  bucker_path: docker-multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
