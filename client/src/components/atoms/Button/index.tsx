@@ -14,8 +14,8 @@ const Button: React.FC<Props> = ({ work = true, bgColor, children, onClick, ...r
   return (
     <button
       css={css`
-        background-color: ${bgColor ? bgColor : theme.color.primary.main};
-        color: ${theme.color.primary.white1};
+        background-color: ${bgColor ? bgColor : theme.color.primary.beige};
+        color: ${theme.color.primary.grey};
         padding: 0.6rem 1.2rem;
         border-radius: 5px;
         margin: 1rem;
