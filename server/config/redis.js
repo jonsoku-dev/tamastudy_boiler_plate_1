@@ -6,5 +6,5 @@ const redisClient = redis.createClient({
   port: keys.redisPort,
   retry_strategy: () => 1000
 });
-
+redisClient.duplicate();
 module.exports = redisClient;

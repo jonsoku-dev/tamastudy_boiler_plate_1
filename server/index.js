@@ -1,4 +1,5 @@
 'use strict';
+
 const path = require('path');
 const express = require('express');
 require('dotenv').config();
@@ -10,7 +11,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const connectPg = require('./config/pg');
 const connectMongo = require('./config/mongo');
-const connectRedis = require('./config/redis');
 const router = require('./routes');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
@@ -20,25 +20,20 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
-const multer = require('multer');
 const fetch = require('node-fetch');
 
 // Load env vars
 
 // Connect to database
-// Connect to database
 connectPg.on('error', () => console.log('Lost PG connection'));
 connectMongo();
-
 connectPg.query('CREATE TABLE IF NOT EXISTS values (number INT)').catch(err => console.log(err));
-
-const redisPublisher = connectRedis.duplicate();
 
 const app = express();
 
 // middleware
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -89,6 +84,7 @@ app.use(passport.session());
 
 // redis 기초 예제 (worker와 연동)
 app.get('/jsonholder', (req, res) => {
+  const redisPublisher = require('./config/redis');
   const redisKey = 'test6';
   return redisPublisher.get(redisKey, (err, response) => {
     if (err) {
@@ -117,10 +113,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.get('/', (req, res) => res.send('Hello World!'));
-
 const server = app.listen(process.env.PORT, () =>
-  console.log(`Example app listening on port ${process.env.PORT}!`.yellow.bold)
+  console.log(`${process.env.PORT}번으로 Node API 가동 중입니다. `.yellow.bold)
 );
 
 // Handle unhandled promise rejections 처리되지 않은 약속 거부 처리
