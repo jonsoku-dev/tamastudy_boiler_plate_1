@@ -7,11 +7,4 @@ const redisClient = redis.createClient({
   retry_strategy: () => 1000
 });
 
-const sub = redisClient.duplicate();
-
-sub.on('message', (channel, message) => {
-  console.log(`Received data: ${message}`);
-});
-
-sub.subscribe('test5');
-sub.subscribe('test6');
+module.exports = redisClient;

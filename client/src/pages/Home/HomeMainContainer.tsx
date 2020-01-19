@@ -13,7 +13,7 @@ const HomeMainContainer = () => {
         background-color: ${theme.color.primary.beige};
       `}
     >
-      <Button text="registry" bordered />
+      <Button text="registry" />
       <Button text="registry" />
     </div>
   );

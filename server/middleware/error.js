@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
   // [Mongoose] 해당하는 ObjectId가 없을 때
   // CastError (Mongoose bad ObjectId)
   if (err.name === 'CastError') {
-    const message = `${error.value}에 해당하는 Resource를 찾을 수 없습니다.`;
+    const message = `${error.value}에 해당하는 리소스를 찾을 수 없습니다.`;
     error = new ErrorResponse(message, 404);
   }
 
@@ -25,7 +25,6 @@ const errorHandler = (err, req, res, next) => {
   // [Mongoose] Validation 에러
   if (err.name === 'ValidationError') {
     const message = Object.values(err.errors).map(val => val.message);
-    // message는 배열
     error = new ErrorResponse(message, 400);
   }
 
