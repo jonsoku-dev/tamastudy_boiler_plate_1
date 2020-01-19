@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import useTheme from '../../utils/useTheme';
+import Button from '../../components/atoms/Button/index';
 
 const HomeMainContainer = () => {
   const theme = useTheme();
@@ -12,7 +13,8 @@ const HomeMainContainer = () => {
         background-color: ${theme.color.primary.beige};
       `}
     >
-      as 1234
+      <Button text="registry" bordered />
+      <Button text="registry" />
     </div>
   );
 };
